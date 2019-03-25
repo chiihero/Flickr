@@ -1,9 +1,9 @@
 package com.example.chii.flickr.Option;
 
 import android.graphics.Rect;
-import android.support.p003v7.widget.RecyclerView;
-import android.support.p003v7.widget.RecyclerView.ItemDecoration;
-import android.support.p003v7.widget.RecyclerView.State;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ItemDecoration;
+import android.support.v7.widget.RecyclerView.State;
 import android.view.View;
 
 public class StaggeredGridSpacingItemDecoration extends ItemDecoration {

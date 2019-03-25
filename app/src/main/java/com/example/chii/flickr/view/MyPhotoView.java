@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import com.example.chii.flickr.Adapter.ViewpagerAdapter;
+import com.example.chii.flickr.Option.GlideOption;
 import com.example.chii.flickr.R;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;

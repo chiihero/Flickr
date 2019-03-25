@@ -5,16 +5,16 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.support.p003v7.widget.GridLayoutManager;
-import android.support.p003v7.widget.RecyclerView;
-import android.support.p003v7.widget.RecyclerView.ItemDecoration;
-import android.support.p003v7.widget.RecyclerView.LayoutManager;
-import android.support.p003v7.widget.RecyclerView.LayoutParams;
-import android.support.p003v7.widget.RecyclerView.State;
-import android.support.p003v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ItemDecoration;
+import android.support.v7.widget.RecyclerView.LayoutManager;
+import android.support.v7.widget.RecyclerView.LayoutParams;
+import android.support.v7.widget.RecyclerView.State;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
-public class DividerGridItemDecoration extends ItemDecoration {
+public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     private static final int[] ATTRS = new int[]{16843284};
     private Drawable mDivider;
 
@@ -30,7 +30,7 @@ public class DividerGridItemDecoration extends ItemDecoration {
     }
 
     private int getSpanCount(RecyclerView recyclerView) {
-        LayoutManager layoutManager = recyclerView.getLayoutManager();
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             return ((GridLayoutManager) layoutManager).getSpanCount();
         }

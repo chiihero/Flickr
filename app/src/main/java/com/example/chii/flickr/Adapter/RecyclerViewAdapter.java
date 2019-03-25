@@ -2,22 +2,23 @@ package com.example.chii.flickr.Adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.chii.flickr.Bean.WallpaperBean.Wallpaper;
+import com.example.chii.flickr.Option.GlideOption;
 import com.example.chii.flickr.R;
+
 import java.util.List;
 
 public class RecyclerViewAdapter extends Adapter<RecyclerViewAdapter.ViewHolder> {
@@ -25,89 +26,115 @@ public class RecyclerViewAdapter extends Adapter<RecyclerViewAdapter.ViewHolder>
     private List<Wallpaper> mData;
     private OnItemClickListener onItemClickListener;
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int i);
-
-        void onItemLongClick(View view, int i);
-    }
-
-    public static class ViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
-        ImageView mImageView;
-
-        public ViewHolder(View view) {
-            super(view);
-            this.mImageView = (ImageView) view.findViewById(R.id.item_iv);
-        }
-    }
-
     public RecyclerViewAdapter(Context context, List<Wallpaper> list) {
         this.mData = list;
         this.mContext = context;
     }
 
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(this.mContext).inflate(R.layout.view_item, viewGroup, false));
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView mImageView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            mImageView = (ImageView) itemView.findViewById(R.id.item_iv);
+        }
     }
 
-    public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
-        final int i2 = this.mContext.getResources().getDisplayMetrics().widthPixels;
-        int width = (int) (((((float) i2) / 2.0f) / ((float) ((Wallpaper) this.mData.get(i)).getWidth())) * ((float) ((Wallpaper) this.mData.get(i)).getHeight()));
-        if (width > 1500) {
-            width = 1500;
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("message = ");
-        stringBuilder.append(((Wallpaper) this.mData.get(i)).getLink());
-        Log.i("RetrofitLog", stringBuilder.toString());
-        if (((Wallpaper) this.mData.get(i)).isNull()) {
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // 实例化展示的view
+        View view = LayoutInflater.from(mContext).inflate(R.layout.view_item, parent, false);
+
+        // 实例化viewholder
+        ViewHolder viewHolder = new ViewHolder(view);
+
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        final int screenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
+        int height = (int) (((float) screenWidth / 2) / mData.get(position).getWidth() * mData.get(position).getHeight());
+        // 绑定数据
+        Log.i("RetrofitLog", "message = " + mData.get(position).getLink());
+//        holder.mImageView.setData(holder,mData.get(position), mSizeModel.get(position),screenWidth/2);
+        if (mData.get(position).isNull()) {
             Log.i("RetrofitLog", "mData is null");
-            int i3 = i2 / 2;
-            Glide.with(this.mContext).asBitmap().load(((Wallpaper) this.mData.get(i)).getLink()).apply(new RequestOptions().override(i3, i3)).into(new SimpleTarget<Bitmap>() {
-                public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
-                    int width = (int) (((((float) i2) / 2.0f) / ((float) bitmap.getWidth())) * ((float) bitmap.getHeight()));
-                    RecyclerViewAdapter.this.setCardViewLayoutParams(viewHolder, i2 / 2, width);
-                    ((Wallpaper) RecyclerViewAdapter.this.mData.get(i)).setSize(i2 / 2, width);
-                    viewHolder.mImageView.setImageBitmap(bitmap);
-                }
-            });
+
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(mData.get(position).getLink())
+                    .apply(GlideOption.getmOptions())
+                    .apply(new RequestOptions().override(screenWidth / 2, screenWidth / 2))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+                            int height = (int) (((float) screenWidth / 2) / bitmap.getWidth() * bitmap.getHeight());
+                            setCardViewLayoutParams(holder, screenWidth / 2, height);
+                            mData.get(position).setSize(screenWidth / 2, height);
+                            holder.mImageView.setImageBitmap(bitmap);
+                        }
+                    });
         } else {
-            i2 /= 2;
-            setCardViewLayoutParams(viewHolder, i2, width);
-            Glide.with(this.mContext).asBitmap().load(((Wallpaper) this.mData.get(i)).getLink()).apply(new RequestOptions().override(i2, width).diskCacheStrategy(DiskCacheStrategy.RESOURCE)).into(viewHolder.mImageView);
+            setCardViewLayoutParams(holder, screenWidth / 2, height);
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(mData.get(position).getLink())
+                    .apply(GlideOption.getmOptions())
+                    .apply(new RequestOptions().override(screenWidth / 2, height))
+//                    .thumbnail(/*sizeMultiplier=*/ 0.25f)
+                    .into(holder.mImageView);
+
         }
-        viewHolder.mImageView.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                if (RecyclerViewAdapter.this.onItemClickListener != null) {
-                    RecyclerViewAdapter.this.onItemClickListener.onItemClick(viewHolder.mImageView, viewHolder.getLayoutPosition());
+
+        //③ 对RecyclerView的每一个itemView设置点击事件
+        holder.mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    int pos = holder.getLayoutPosition();
+                    onItemClickListener.onItemClick(holder.mImageView, pos);
                 }
             }
         });
-        viewHolder.mImageView.setOnLongClickListener(new OnLongClickListener() {
-            public boolean onLongClick(View view) {
-                if (RecyclerViewAdapter.this.onItemClickListener != null) {
-                    RecyclerViewAdapter.this.onItemClickListener.onItemLongClick(viewHolder.mImageView, viewHolder.getLayoutPosition());
-                }
+
+        holder.mImageView.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (onItemClickListener != null) {
+                    int pos = holder.getLayoutPosition();
+                    onItemClickListener.onItemLongClick(holder.mImageView, pos);
+                } //表示此事件已经消费，不会触发单击事件
                 return true;
             }
         });
     }
 
-    private void setCardViewLayoutParams(ViewHolder viewHolder, int i, int i2) {
-        LayoutParams layoutParams = viewHolder.mImageView.getLayoutParams();
-        layoutParams.width = i;
-        layoutParams.height = i2;
-        viewHolder.mImageView.setLayoutParams(layoutParams);
+    private void setCardViewLayoutParams (ViewHolder holder, int width, int height){
+        ViewGroup.LayoutParams layoutParams = holder.mImageView.getLayoutParams();
+        layoutParams.width = width;
+        layoutParams.height = height;
+        holder.mImageView.setLayoutParams(layoutParams);
     }
 
+    @Override
     public int getItemCount() {
         return this.mData.size();
     }
 
-    public void onViewRecycled(ViewHolder viewHolder) {
-        super.onViewRecycled(viewHolder);
+    @Override
+    public void onViewRecycled (ViewHolder holder){
+        super.onViewRecycled(holder);
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+    // ① 定义点击回调接口
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+        void onItemLongClick(View view, int position);
     }
+    // ② 定义一个设置点击监听器的方法
+    public void setOnItemClickListener (OnItemClickListener listener){
+        this.onItemClickListener = listener;
+    }
+
 }

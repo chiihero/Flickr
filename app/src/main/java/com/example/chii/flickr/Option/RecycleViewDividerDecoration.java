@@ -7,11 +7,11 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.support.p000v4.content.ContextCompat;
-import android.support.p003v7.widget.RecyclerView;
-import android.support.p003v7.widget.RecyclerView.ItemDecoration;
-import android.support.p003v7.widget.RecyclerView.LayoutParams;
-import android.support.p003v7.widget.RecyclerView.State;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ItemDecoration;
+import android.support.v7.widget.RecyclerView.LayoutParams;
+import android.support.v7.widget.RecyclerView.State;
 import android.view.View;
 
 public class RecycleViewDividerDecoration extends ItemDecoration {

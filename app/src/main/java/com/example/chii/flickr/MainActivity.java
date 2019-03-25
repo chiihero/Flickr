@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //返回顶端
-        final ScrollView sc = (ScrollView) findViewById(R.id.sc);
+//        final ScrollView sc = (ScrollView) findViewById(R.id.sc);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
 //                mRecyclerView.getLayoutManager().scrollToPosition(0);
-                sc.fullScroll(view.FOCUS_UP);
+//                sc.fullScroll(view.FOCUS_UP);
 
             }
         });
