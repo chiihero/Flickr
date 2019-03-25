@@ -6,4 +6,11 @@
     <string name="nav_header_subtitle">chiihero@github</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="setting">设置</string>
+    <string name="daynight_label">夜间模式</string>
+    <string name="daynight_label">日间模式</string>
+    <string name="menu_anzhuobizhi">安卓壁纸</string>
+    <string name="menu_bilibili">哔哩哔哩</string>
+    <string name="about">关于</string>
+
 </resources>

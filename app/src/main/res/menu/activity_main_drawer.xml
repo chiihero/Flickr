@@ -4,34 +4,22 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <!--<item-->
-            <!--android:id="@+id/nav_camera"-->
-            <!--android:icon="@drawable/ic_menu_camera"-->
-            <!--android:title="Import" />-->
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_bilibili"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_bilibili" />
+        <item
+            android:id="@+id/nav_anzhuobizhi"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gank" />
-        <!--<item-->
-            <!--android:id="@+id/nav_slideshow"-->
-            <!--android:icon="@drawable/ic_menu_slideshow"-->
-            <!--android:title="Slideshow" />-->
-        <!--<item-->
-            <!--android:id="@+id/nav_manage"-->
-            <!--android:icon="@drawable/ic_menu_manage"-->
-            <!--android:title="Tools" />-->
+            android:title="@string/menu_anzhuobizhi" />
+
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/setting">
         <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <!--<item-->
-                <!--android:id="@+id/nav_send"-->
-                <!--android:icon="@drawable/ic_menu_send"-->
-                <!--android:title="Send" />-->
+
+            <item android:id="@+id/nav_daynight" android:title="@string/daynight_label"/>
+            <item android:id="@+id/nav_about" android:title="@string/about"/>
         </menu>
     </item>
 

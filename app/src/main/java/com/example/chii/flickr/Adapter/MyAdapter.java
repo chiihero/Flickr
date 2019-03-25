@@ -14,8 +14,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.chii.flickr.Bean.WallpaperBean;
+import com.example.chii.flickr.Option.GlideOption;
 import com.example.chii.flickr.R;
-import com.example.chii.flickr.connes.GlideOption;
 
 
 import java.util.List;

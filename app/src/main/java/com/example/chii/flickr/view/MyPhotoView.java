@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 
 import com.example.chii.flickr.Adapter.ViewpagerAdapter;
 import com.example.chii.flickr.R;
-import com.example.chii.flickr.connes.GlideOption;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 
