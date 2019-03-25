@@ -24,15 +24,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.chii.flickr.Adapter.RecyclerViewAdapter;
 import com.example.chii.flickr.Bean.WallpaperBean;
 import com.example.chii.flickr.Option.DividerGridItemDecoration;
 import com.example.chii.flickr.R;
-import com.example.chii.flickr.Option.ContentApi;
-import com.example.chii.flickr.Option.RetrofitClient;
+import com.example.chii.flickr.connes.ContentApi;
+import com.example.chii.flickr.connes.RetrofitClient;
 import com.scwang.smartrefresh.header.StoreHouseHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -51,7 +50,6 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private ContentApi service;
 
     private int mStart = 1;
     private static final int mSizes = 10;
@@ -59,12 +57,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<WallpaperBean.Wallpaper> mData = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private RefreshLayout mSmartRefreshLayout;
-    private Subscription mLoadNetScription;
     private boolean LoadingMore = false;
     private boolean Refreshing = false;
-    private String source = "哔哩哔哩";
     private Context context;
-
+    private ContentApi service;
+    private Subscription mLoadNetScription;
+    private String source = "哔哩哔哩";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         context = this;
@@ -82,32 +80,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                        .setAction("Action", null).show();
 //                mRecyclerView.getLayoutManager().scrollToPosition(0);
 //                sc.fullScroll(view.FOCUS_UP);
-
             }
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         //getDate();//获取第一次加载数据
         initData();
-
         initView();
 
         Myphoto_click();//设置点击事件
         SharedPreferences sharedPreferences = getSharedPreferences("Info", MODE_PRIVATE);
 
         ShowWifi(sharedPreferences);
-
         ShowFirst(sharedPreferences);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -155,7 +149,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 newData("安卓壁纸");
                 break;
             case R.id.nav_daynight:
-                int mode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                int mode =
+                        getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
                 if (mode == Configuration.UI_MODE_NIGHT_YES) {
                     getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
@@ -199,7 +194,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void run() {
                         startActivity(intent);
-//                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, view, "sharedView").toBundle());
+//                        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation
+// (MainActivity.this, view, "sharedView").toBundle());
                     }
                 }).start();
 
@@ -208,16 +204,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onItemLongClick(final View view, final int position) {
                 new AlertDialog.Builder(MainActivity.this)
-                        .setItems(new String[]{"点赞","收藏"}, new DialogInterface.OnClickListener(){
+                        .setItems(new String[]{"点赞", "收藏"}, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface arg0, int arg1) {
                                 switch (arg1) {
                                     case 0:
-                                        Snackbar.make(view, "已经点赞" + mData.get(position).getAuthor()+position, Snackbar.LENGTH_LONG).show();
+                                        Snackbar.make(view,
+                                                "已经点赞" + mData.get(position).getAuthor() + position, Snackbar.LENGTH_LONG).show();
                                         break;
                                     case 1:
-                                        Snackbar.make(view, "已经收藏" + mData.get(position).getAuthor()+position, Snackbar.LENGTH_LONG).show();
+                                        Snackbar.make(view,
+                                                "已经收藏" + mData.get(position).getAuthor() + position, Snackbar.LENGTH_LONG).show();
                                         break;
-                                    default: break;
+                                    default:
+                                        break;
                                 }
                                 arg0.dismiss();
                             }
@@ -234,7 +233,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void initData() {
         mRecyclerView = (RecyclerView) findViewById(R.id.swipe_target);
-        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL) {
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,
+                StaggeredGridLayoutManager.VERTICAL) {
             @Override
             public boolean canScrollVertically() {
                 return false;
@@ -258,7 +258,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //分割线类型
         mRecyclerView.addItemDecoration(new DividerGridItemDecoration(this));
 //        mRecyclerView.addItemDecoration(new StaggeredGridSpacingItemDecoration(2,10));
-//        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration
+// .VERTICAL));
 
         mRecyclerView.setHasFixedSize(true);
         mAdapter = new RecyclerViewAdapter(MainActivity.this, mData);
@@ -302,24 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void getDate() {
-        service = RetrofitClient.getInstance().create(ContentApi.class);
-        if (mLoadNetScription != null && mLoadNetScription.isUnsubscribed()) {
-            mLoadNetScription.unsubscribe();
-        }
-        mLoadNetScription = service.getJson(source, 1 + mSizes * (mStart - 1), mSizes)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter(new Func1<WallpaperBean, Boolean>() {
-                    @Override
-                    public Boolean call(WallpaperBean WallpaperBean) {
-                        return !WallpaperBean.isError();
-                    }
-                }).flatMap(new FilterMap()).subscribe(new LoadNetSubscriber());
-        mStart++;
-        mAdapter.notifyDataSetChanged();
 
-    }
 
     /**
      * 网络请求
@@ -343,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    class FilterMap implements Func1<WallpaperBean, Observable<WallpaperBean.Wallpaper>> {
+       class FilterMap implements Func1<WallpaperBean, Observable<WallpaperBean.Wallpaper>> {
         @Override
         public rx.Observable<WallpaperBean.Wallpaper> call(WallpaperBean WallpaperBean) {
             if (WallpaperBean.getwallpaper().size() >= 10) {
@@ -436,6 +420,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
+
+    private void getDate() {
+        service = RetrofitClient.getInstance().create(ContentApi.class);
+        if (mLoadNetScription != null && mLoadNetScription.isUnsubscribed()) {
+            mLoadNetScription.unsubscribe();
+        }
+        mLoadNetScription = service.getJson(source, 1 + mSizes * (mStart - 1), mSizes)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Func1<WallpaperBean, Boolean>() {
+                    @Override
+                    public Boolean call(WallpaperBean WallpaperBean) {
+                        return !WallpaperBean.isError();
+                    }
+                }).flatMap(new FilterMap()).subscribe(new LoadNetSubscriber());
+        mStart++;
+        mAdapter.notifyDataSetChanged();
+
+    }
+
 
     private void newData(String newsource) {
         mAdapter.notifyItemRangeRemoved(0, mData.size());
